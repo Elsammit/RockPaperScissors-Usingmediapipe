@@ -3,12 +3,10 @@ import mediapipe as mp
 from PIL import ImageFont, ImageDraw, Image
 import numpy as np
 import time
-
 import Define
 
-m_Define = Define.Define()
-
 class hands:
+    m_Define = Define.Define()
     mp_drawing = mp.solutions.drawing_utils
     mp_drawing_styles = mp.solutions.drawing_styles
     mp_hands = mp.solutions.hands
@@ -47,15 +45,13 @@ class hands:
         hand_ret = ""
         if fingersList[0][0] > fingersList[0][1] and fingersList[1][0] > fingersList[1][1] and \
             fingersList[2][0] > fingersList[2][1] and fingersList[3][0] > fingersList[3][1]:
-            hand_ret = m_Define.HANDSHAPE_ROCK
+            hand_ret = self.m_Define.HANDSHAPE_ROCK
         elif fingersList[2][0] > fingersList[2][1] and fingersList[3][0] > fingersList[3][1]:
-            hand_ret = m_Define.HANDSHAPE_SCISSOR
+            hand_ret = self.m_Define.HANDSHAPE_SCISSOR
         else:
-            hand_ret = m_Define.HANDSHAPE_PAPPER
-
+            hand_ret = self.m_Define.HANDSHAPE_PAPPER
 
         return hand_ret
-
 
     def HandsLoop(self):
         cap = cv2.VideoCapture(0)
@@ -89,7 +85,7 @@ class hands:
                 self.after_img = cv2.flip(image - before_image, 1)
                 img_pil = Image.fromarray(self.after_img)
                 draw = ImageDraw.Draw(img_pil)
-                draw.text((10, 350), self.rsp, font = m_Define.FONT, fill = (255,0,255))
+                draw.text((10, 350), self.rsp, font = self.m_Define.FONT, fill = (255,0,255))
                 self.after_img = np.array(img_pil)
                 self.StartFlg = True
 

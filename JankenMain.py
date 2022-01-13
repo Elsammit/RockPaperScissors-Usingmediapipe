@@ -1,5 +1,6 @@
 import PartnerHands
 import hands
+import JudgeJanken
 import threading
 import cv2
 import time
@@ -7,30 +8,14 @@ from PIL import ImageFont, ImageDraw, Image
 import numpy as np
 import Define
 
-m_Define = Define.Define()
-
-def JudgeWinOrLose(handsType,partnerType):
-    result = m_Define.YOUWIN
-    if handsType == m_Define.HANDSHAPE_ROCK and partnerType == m_Define.HANDSHAPE_PAPPER or \
-        handsType == m_Define.HANDSHAPE_PAPPER and partnerType == m_Define.HANDSHAPE_SCISSOR or \
-        handsType == m_Define.HANDSHAPE_SCISSOR and partnerType == m_Define.HANDSHAPE_ROCK:
-            result = m_Define.YOULOSE
-    elif handsType == m_Define.HANDSHAPE_ROCK and partnerType == m_Define.HANDSHAPE_SCISSOR or \
-        handsType == m_Define.HANDSHAPE_PAPPER and partnerType == m_Define.HANDSHAPE_ROCK or \
-        handsType == m_Define.HANDSHAPE_SCISSOR and partnerType == m_Define.HANDSHAPE_PAPPER:
-            result = m_Define.YOUWIN
-    else:
-        result = m_Define.YOUDRAW
-    print(result)
-    
-    return result
-
 if __name__ == '__main__':
     m_hands = hands.hands()
     thread1 = threading.Thread(target=m_hands.HandsLoop)
     thread1.start()
     m_PartnerHands = PartnerHands.Pertner()
+    m_Judge = JudgeJanken.Judge()
     result = ""
+    m_Define = Define.Define()
 
     while True:
         if m_hands.StartFlg == True:
@@ -44,7 +29,7 @@ if __name__ == '__main__':
             
             if m_PartnerHands.JankenResult == True:
                 print("hands:",m_hands.rsp,", partner:",m_PartnerHands.rsp)
-                result = JudgeWinOrLose(m_hands.rsp,m_PartnerHands.rsp)
+                result = m_Judge.JudgeWinOrLose(m_hands.rsp,m_PartnerHands.rsp)
             
             resultImage = cv2.resize(m_PartnerHands.result_img, (m_hands.after_img.shape[1], m_hands.after_img.shape[0]))
             concatImg = cv2.hconcat([m_hands.after_img, resultImage]) 
