@@ -2,20 +2,18 @@ import Define
 
 class Judge:
     m_Define = Define.Define()
+    JudgeResult = ""
     def JudgeWinOrLose(self,handsType,partnerType):
-        result = self.m_Define.YOUWIN
         if handsType == self.m_Define.HANDSHAPE_ROCK and partnerType == self.m_Define.HANDSHAPE_PAPPER or \
             handsType == self.m_Define.HANDSHAPE_PAPPER and partnerType == self.m_Define.HANDSHAPE_SCISSOR or \
             handsType == self.m_Define.HANDSHAPE_SCISSOR and partnerType == self.m_Define.HANDSHAPE_ROCK:
-                result = self.m_Define.YOULOSE
+                self.JudgeResult = self.m_Define.YOULOSE
         elif handsType == self.m_Define.HANDSHAPE_ROCK and partnerType == self.m_Define.HANDSHAPE_SCISSOR or \
             handsType == self.m_Define.HANDSHAPE_PAPPER and partnerType == self.m_Define.HANDSHAPE_ROCK or \
             handsType == self.m_Define.HANDSHAPE_SCISSOR and partnerType == self.m_Define.HANDSHAPE_PAPPER:
-                result = self.m_Define.YOUWIN
+                self.JudgeResult = self.m_Define.YOUWIN
         else:
-            result = self.m_Define.YOUDRAW
-        
-        return result
+            self.JudgeResult = self.m_Define.YOUDRAW
 
 if __name__ == '__main__':
     m_Define = Define.Define()
