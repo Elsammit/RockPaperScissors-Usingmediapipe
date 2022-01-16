@@ -28,7 +28,6 @@ if __name__ == '__main__':
         if m_hands.StartFlg == True and m_PartnerHands.StartFlg == True:
             
             if m_PartnerHands.JankenResult == True:
-                print("hands:",m_hands.rsp,", partner:",m_PartnerHands.rsp)
                 result = m_Judge.JudgeWinOrLose(m_hands.rsp,m_PartnerHands.rsp)
             
             resultImage = cv2.resize(m_PartnerHands.result_img, (m_hands.after_img.shape[1], m_hands.after_img.shape[0]))

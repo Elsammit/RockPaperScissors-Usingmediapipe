@@ -14,7 +14,6 @@ class Judge:
                 result = self.m_Define.YOUWIN
         else:
             result = self.m_Define.YOUDRAW
-        print(result)
         
         return result
 
@@ -26,4 +25,3 @@ if __name__ == '__main__':
     for i in list:
         for j in list:
             result = m_judge.JudgeWinOrLose(i,j)
-            print("me:",i," you:",j," result:",result)
