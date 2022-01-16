@@ -7,7 +7,8 @@ import time
 from PIL import ImageFont, ImageDraw, Image
 import numpy as np
 import Define
-
+import JankenConcat
+'''
 m_PartnerHands = PartnerHands.Pertner()
 m_hands = hands.hands()
 
@@ -21,10 +22,14 @@ def InitMyHand():
 
 def GetHandPattern():
     return m_hands.rsp, m_PartnerHands.rsp
+'''
 
 if __name__ == '__main__':
+    m_ConcatImage = JankenConcat.ConcatImage()
+    m_ConcatImage.InitMyHand()
+    m_ConcatImage.LoopConcatImage()
+    '''
     InitMyHand()
-    
     m_Judge = JudgeJanken.Judge()
     result = ""
     m_Define = Define.Define()
@@ -45,3 +50,4 @@ if __name__ == '__main__':
                 m_hands.FinishFlg = True
                 m_PartnerHands.FinishFlg = True
                 break
+    '''

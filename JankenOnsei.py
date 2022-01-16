@@ -11,9 +11,9 @@ class Onsei():
         self.onseiStatus = True
         time.sleep(0.4)
         winsound.PlaySound(m_Define.JANKEN_JANWAV, winsound.SND_FILENAME)
+        self.onseiStatus = False
         HandsDecision()
         winsound.PlaySound(m_Define.JANKEN_PONWAV, winsound.SND_FILENAME)
-        self.onseiStatus = False
 
 if __name__ == '__main__':
     m_Onsei = Onsei()

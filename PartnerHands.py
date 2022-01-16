@@ -38,7 +38,7 @@ class Pertner:
         x = random.randint(0,5)
         self.GetHandsMat(x)
         time.sleep(0.5)
-        mehand,cpuhand = self.GetPatternFunc()
+        cpuhand,mehand = self.GetPatternFunc()
         self.JudgeFunc(mehand,cpuhand)
 
     def PartnerHands(self):
