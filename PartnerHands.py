@@ -9,18 +9,19 @@ m_Define = Define.Define()
 m_Onsei = JankenOnsei.Onsei()
 
 class Pertner:
-    looretCnt = 1000
+    looretCnt = 0
     filePath = m_Define.HANDSHAPE_ROCK_IMG
     result_img = cv2.imread(m_Define.HANDSHAPE_ROCK_IMG)
     StartFlg = False
-    JankenResult = False
     rsp = ""
     FinishFlg = False
-    testFlg = False
+    JudgeFunc = ""
+    GetPatternFunc = ""
+    thread1 = threading.Thread(target=m_Onsei.jankenOnsei)
 
     def StartOnseiThread(self):
-        thread1 = threading.Thread(target=m_Onsei.jankenOnsei)
-        thread1.start()
+        self.thread1 = threading.Thread(target=m_Onsei.jankenOnsei, args=(self.HandsDecision,))
+        self.thread1.start()
 
     def GetHandsMat(self, cnt):
         if cnt % 10 <= 2:
@@ -33,32 +34,30 @@ class Pertner:
             self.filePath = m_Define.HANDSHAPE_PAPPERS_IMG
             self.rsp = m_Define.HANDSHAPE_PAPPER
 
+    def HandsDecision(self):
+        x = random.randint(0,9)
+        self.GetHandsMat(x)
+        cpuhand,mehand = self.GetPatternFunc()
+        self.JudgeFunc(mehand,cpuhand)
+
     def PartnerHands(self):
         if m_Onsei.onseiStatus == 0:
             self.GetHandsMat(self.looretCnt)
-            if self.looretCnt > 1000:
-                self.looretCnt = 0
-        elif m_Onsei.onseiStatus == 1:
-            x = random.randint(0,5)
-            self.GetHandsMat(x)
-            self.JankenResult = True
-            m_Onsei.onseiStatus += 1
         elif m_Onsei.onseiStatus == 2:
-            self.JankenResult = False
-        elif m_Onsei.onseiStatus == 3:
-            m_Onsei.onseiStatus = 0
+            self.thread1.join()
             self.StartOnseiThread()
             
-            self.JankenResult = False
             self.looretCnt = 0
             time.sleep(0.1)
-
+        
         resultImage = cv2.imread(self.filePath)
 
         return resultImage
     
-    def PartnerLoop(self):
-        m_Onsei.onseiStatus = 3
+    def PartnerLoop(self, func, getPattern):
+        self.StartOnseiThread()
+        self.JudgeFunc = func
+        self.GetPatternFunc = getPattern
         while True:
             self.looretCnt += 1
             self.result_img = self.PartnerHands()

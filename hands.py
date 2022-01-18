@@ -11,7 +11,6 @@ class hands:
     mp_drawing_styles = mp.solutions.drawing_styles
     mp_hands = mp.solutions.hands
     after_img = cv2.imread(m_Define.HANDSHAPE_ROCK_IMG)
-    StartFlg = False
     rsp = ""
     FinishFlg = False
 
@@ -53,52 +52,57 @@ class hands:
 
         return hand_ret
 
-    def HandsLoop(self):
+    def MyHandsCapture(self, cap, hands):
+        success, image = cap.read()
+        if not success:
+            print("Ignoring empty camera frame.")
+            return False
+
+        image.flags.writeable = True
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        before_image = image.copy()
+
+        results = hands.process(image)
+        
+        if results.multi_hand_landmarks:
+            for hand_landmarks in results.multi_hand_landmarks:
+                self.mp_drawing.draw_landmarks(
+                    image,
+                    hand_landmarks,
+                    self.mp_hands.HAND_CONNECTIONS,
+                    self.mp_drawing_styles.get_default_hand_landmarks_style(),
+                    self.mp_drawing_styles.get_default_hand_connections_style())
+                fingerList = self.HandShape(hand_landmarks, image)
+                self.rsp = self.JudgeRPS(fingerList)
+                
+        self.after_img = cv2.flip(image - before_image, 1)
+        img_pil = Image.fromarray(self.after_img)
+        draw = ImageDraw.Draw(img_pil)
+        draw.text((10, 350), self.rsp, font = self.m_Define.FONT, fill = (255,0,255))
+        self.after_img = np.array(img_pil)
+
+    def HandsLoop(self, InitFunc):
         cap = cv2.VideoCapture(0)
         with self.mp_hands.Hands(
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5) as hands:
 
+            stFlg = True
             while cap.isOpened():
-                success, image = cap.read()
-                if not success:
-                    print("Ignoring empty camera frame.")
-                    continue
-
-                image.flags.writeable = True
-                image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-                before_image = image.copy()
-
-                results = hands.process(image)
+                self.MyHandsCapture(cap, hands)
+                if stFlg == True:
+                    InitFunc()
+                    stFlg = False
                 
-                if results.multi_hand_landmarks:
-                    for hand_landmarks in results.multi_hand_landmarks:
-                        self.mp_drawing.draw_landmarks(
-                            image,
-                            hand_landmarks,
-                            self.mp_hands.HAND_CONNECTIONS,
-                            self.mp_drawing_styles.get_default_hand_landmarks_style(),
-                            self.mp_drawing_styles.get_default_hand_connections_style())
-                        fingerList = self.HandShape(hand_landmarks, image)
-                        self.rsp = self.JudgeRPS(fingerList)
-                        
-                self.after_img = cv2.flip(image - before_image, 1)
-                img_pil = Image.fromarray(self.after_img)
-                draw = ImageDraw.Draw(img_pil)
-                draw.text((10, 350), self.rsp, font = self.m_Define.FONT, fill = (255,0,255))
-                self.after_img = np.array(img_pil)
-                self.StartFlg = True
-
                 if self.FinishFlg == True:
                     break
                 
                 time.sleep(0.01)
-                
+
                 if __name__ == '__main__':
                     cv2.imshow('MediaPipe Hands', self.after_img)
                     if cv2.waitKey(5) & 0xFF == 27:
                         break
-
         cap.release()
 
 if __name__ == '__main__':

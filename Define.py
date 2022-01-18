@@ -7,9 +7,9 @@ class Define:
     HANDSHAPE_ROCK = "グー"
     HANDSHAPE_SCISSOR = "チョキ"
     HANDSHAPE_PAPPER = "パー"
-    YOUWIN = "あなたの勝ち"
-    YOULOSE = "あなたの負け"
-    YOUDRAW = "あいこ"
+    YOUWIN = "you win"
+    YOULOSE = "you lose"
+    YOUDRAW = "draw"
 
     JANKEN_JANWAV = "./audio/janken.wav"
     JANKEN_PONWAV = "./audio/pon.wav"
