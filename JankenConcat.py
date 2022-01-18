@@ -25,7 +25,7 @@ class ConcatImage:
         thread1.start()
 
     def GetHandPattern(self):
-        return self.m_hands.rsp, self.m_PartnerHands.rsp
+        return self.m_PartnerHands.rsp, self.m_hands.rsp
 
     def ConcatLoopThread(self):
         thread3 = threading.Thread(target=self.LoopConcatImage)
@@ -34,17 +34,21 @@ class ConcatImage:
     def GetConcatImage(self):
         return self.concatImg
 
+    def GetResult(self):
+        return self.m_Judge.JudgeResult
+
     def LoopConcatImage(self):
         while True:
             if self.m_PartnerHands.StartFlg == True:
                 resultImage = cv2.resize(self.m_PartnerHands.result_img, (self.m_hands.after_img.shape[1], self.m_hands.after_img.shape[0]))
                 self.concatImg = cv2.hconcat([self.m_hands.after_img, resultImage]) 
                 
+                '''
                 img_pil = Image.fromarray(self.concatImg)
                 draw = ImageDraw.Draw(img_pil)
                 draw.text((10, 20), self.m_Judge.JudgeResult, font = self.m_Define.FONT, fill = (255,0,255))
                 self.concatImg = np.array(img_pil)
-                
+                '''
                 cv2.imshow('Result Main', self.concatImg)
                 self.StartConcat = True
                 if cv2.waitKey(5) & 0xFF == 27:

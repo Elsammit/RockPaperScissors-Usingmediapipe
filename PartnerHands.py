@@ -35,16 +35,15 @@ class Pertner:
             self.rsp = m_Define.HANDSHAPE_PAPPER
 
     def HandsDecision(self):
-        x = random.randint(0,5)
+        x = random.randint(0,9)
         self.GetHandsMat(x)
-        time.sleep(0.5)
         cpuhand,mehand = self.GetPatternFunc()
         self.JudgeFunc(mehand,cpuhand)
 
     def PartnerHands(self):
-        if m_Onsei.onseiStatus == True:
+        if m_Onsei.onseiStatus == 0:
             self.GetHandsMat(self.looretCnt)
-        else:
+        elif m_Onsei.onseiStatus == 2:
             self.thread1.join()
             self.StartOnseiThread()
             

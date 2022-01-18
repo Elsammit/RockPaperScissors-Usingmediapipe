@@ -4,6 +4,7 @@ class Judge:
     m_Define = Define.Define()
     JudgeResult = ""
     def JudgeWinOrLose(self,handsType,partnerType):
+        print("me:",handsType," partner:",partnerType)
         if handsType == self.m_Define.HANDSHAPE_ROCK and partnerType == self.m_Define.HANDSHAPE_PAPPER or \
             handsType == self.m_Define.HANDSHAPE_PAPPER and partnerType == self.m_Define.HANDSHAPE_SCISSOR or \
             handsType == self.m_Define.HANDSHAPE_SCISSOR and partnerType == self.m_Define.HANDSHAPE_ROCK:
