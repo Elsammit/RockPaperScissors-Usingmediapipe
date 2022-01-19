@@ -21,13 +21,23 @@ class JankenGUI:
     def DispGuiApp(self):
         image = self.getImgFunction()
         image_width, image_height = image.shape[1], image.shape[0]
+
+        #dpg.create_context()
+        #dpg.set_global_font_scale(10)
+        with dpg.font_registry():
+            fonts = dpg.font("./cambria.ttc", 30, tag="result")
+
         with dpg.texture_registry(show=False):
             dpg.add_raw_texture(image_width, image_height, self.getImgFunction(), tag="texture_tag", format=dpg.mvFormat_Float_rgb, use_internal_label=False)
 
-        with dpg.window(label="Main window",pos=[10,10]):
+        with dpg.window(label="",pos=[10,10]):
             dpg.add_image("texture_tag")
-            dpg.add_text(tag="result")
+            #dpg.set_global_font_scale(10)
+            dpg.add_text("", tag="result")
+            #dpg.bind_item_font(dpg.last_item(), "ttf-font")
 
+        #dpg.create_viewport()   
+        #dpg.setup_dearpygui()
         dpg.show_viewport()
 
         while dpg.is_dearpygui_running():
@@ -36,9 +46,11 @@ class JankenGUI:
             data = data.ravel()
             data = np.asfarray(data, dtype='f')
             texture_data = np.true_divide(data, 255.0)
-                
+  
             dpg.set_value("texture_tag", texture_data)
             dpg.set_value("result", self.getResult())
+
+            #dpg.bind_item_font(dpg.last_item(), "ttf-font")
             time.sleep(0.001)
 
             dpg.render_dearpygui_frame()
