@@ -9,7 +9,7 @@ class JankenGUI:
 
     def __init__(self) -> None:
         dpg.create_context()
-        dpg.create_viewport(max_width=1500, max_height=800)
+        dpg.create_viewport(max_width=1500, max_height=1000)
         dpg.setup_dearpygui()
     
     def GetImageFunc(self,func):
@@ -24,8 +24,8 @@ class JankenGUI:
 
         #dpg.create_context()
         #dpg.set_global_font_scale(10)
-        with dpg.font_registry():
-            fonts = dpg.font("./cambria.ttc", 30, tag="result")
+        with dpg.font_registry(show=False):
+            dpg.add_font("./cambria.ttc", 35, tag="ttf-font")
 
         with dpg.texture_registry(show=False):
             dpg.add_raw_texture(image_width, image_height, self.getImgFunction(), tag="texture_tag", format=dpg.mvFormat_Float_rgb, use_internal_label=False)
@@ -33,8 +33,8 @@ class JankenGUI:
         with dpg.window(label="",pos=[10,10]):
             dpg.add_image("texture_tag")
             #dpg.set_global_font_scale(10)
-            dpg.add_text("", tag="result")
-            #dpg.bind_item_font(dpg.last_item(), "ttf-font")
+            dpg.add_text(tag="result")
+            dpg.bind_item_font(dpg.last_item(), "ttf-font")
 
         #dpg.create_viewport()   
         #dpg.setup_dearpygui()
