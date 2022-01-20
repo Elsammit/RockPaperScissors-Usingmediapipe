@@ -15,6 +15,8 @@ class ConcatImage:
     m_Define = Define.Define()
     concatImg = ""
     StartConcat = False
+    IsViewConcatImg = False
+    FinishConcat = False
 
     def InitCpuHand(self):
         thread2 = threading.Thread(target=self.m_PartnerHands.PartnerLoop, args=(self.m_Judge.JudgeWinOrLose, self.GetHandPattern, ))
@@ -49,9 +51,12 @@ class ConcatImage:
                 draw.text((10, 20), self.m_Judge.JudgeResult, font = self.m_Define.FONT, fill = (255,0,255))
                 self.concatImg = np.array(img_pil)
                 '''
-                cv2.imshow('Result Main', self.concatImg)
                 self.StartConcat = True
-                if cv2.waitKey(5) & 0xFF == 27:
+
+                if self.IsViewConcatImg == True:
+                    cv2.imshow('Result Main', self.concatImg)
+                    
+                if self.FinishConcat == True:
                     self.m_hands.FinishFlg = True
                     self.m_PartnerHands.FinishFlg = True
                     break
