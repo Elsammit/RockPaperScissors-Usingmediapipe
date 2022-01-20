@@ -6,10 +6,11 @@ import time
 class JankenGUI:
     getImgFunction = ""
     getResult = ""
+    FinishGUI = False
 
     def __init__(self) -> None:
         dpg.create_context()
-        dpg.create_viewport(max_width=1500, max_height=1000)
+        dpg.create_viewport(max_width=1500, max_height=1500)
         dpg.setup_dearpygui()
     
     def GetImageFunc(self,func):
@@ -22,24 +23,20 @@ class JankenGUI:
         image = self.getImgFunction()
         image_width, image_height = image.shape[1], image.shape[0]
 
-        #dpg.create_context()
-        #dpg.set_global_font_scale(10)
         with dpg.font_registry(show=False):
-            dpg.add_font("./cambria.ttc", 35, tag="ttf-font")
+            dpg.add_font("./cambria.ttc", 50, tag="ttf-font")
 
         with dpg.texture_registry(show=False):
             dpg.add_raw_texture(image_width, image_height, self.getImgFunction(), tag="texture_tag", format=dpg.mvFormat_Float_rgb, use_internal_label=False)
 
-        with dpg.window(label="",pos=[10,10]):
+        with dpg.window(label="",pos=[10,10],width=1500, height=1500):
             dpg.add_image("texture_tag")
-            #dpg.set_global_font_scale(10)
             dpg.add_text(tag="result")
             dpg.bind_item_font(dpg.last_item(), "ttf-font")
 
-        #dpg.create_viewport()   
-        #dpg.setup_dearpygui()
         dpg.show_viewport()
 
+        gameCnt = 0
         while dpg.is_dearpygui_running():
             img = cv2.resize(self.getImgFunction() , (image_width, image_height))
             data = np.flip(img, 2)
@@ -50,12 +47,17 @@ class JankenGUI:
             dpg.set_value("texture_tag", texture_data)
             dpg.set_value("result", self.getResult())
 
-            #dpg.bind_item_font(dpg.last_item(), "ttf-font")
             time.sleep(0.001)
 
             dpg.render_dearpygui_frame()
 
+            if gameCnt == 3:
+                self.FinishGUI = True
+            else:
+                gameCnt+=1
+
         dpg.destroy_context()
+        self.FinishGUI = True
 
 if __name__ == '__main__':
     m_JankenGUI = JankenGUI()

@@ -9,8 +9,11 @@ if __name__ == '__main__':
     m_ConcatImage.ConcatLoopThread()
     m_JankenGUI.GetImageFunc(m_ConcatImage.GetConcatImage)
     m_JankenGUI.GetJudgeResult(m_ConcatImage.GetResult)
+
     while True:
         if m_ConcatImage.StartConcat == True:
             break
 
     m_JankenGUI.DispGuiApp()
+    if m_JankenGUI.FinishGUI == True:
+        m_ConcatImage.FinishConcat = True
