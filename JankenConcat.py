@@ -3,9 +3,6 @@ import hands
 import JudgeJanken
 import threading
 import cv2
-import time
-from PIL import ImageFont, ImageDraw, Image
-import numpy as np
 import Define
 
 class ConcatImage:
@@ -44,13 +41,7 @@ class ConcatImage:
             if self.m_PartnerHands.StartFlg == True:
                 resultImage = cv2.resize(self.m_PartnerHands.result_img, (self.m_hands.after_img.shape[1], self.m_hands.after_img.shape[0]))
                 self.concatImg = cv2.hconcat([self.m_hands.after_img, resultImage]) 
-                
-                '''
-                img_pil = Image.fromarray(self.concatImg)
-                draw = ImageDraw.Draw(img_pil)
-                draw.text((10, 20), self.m_Judge.JudgeResult, font = self.m_Define.FONT, fill = (255,0,255))
-                self.concatImg = np.array(img_pil)
-                '''
+
                 self.StartConcat = True
 
                 if self.IsViewConcatImg == True:
